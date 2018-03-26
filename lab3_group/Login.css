@@ -1,0 +1,135 @@
+body{
+    margin:0;
+    font-weight: normal;
+}
+#div0{
+    background-color: #333;
+}
+#div10{
+    background-color: #333;
+}
+#div1 {
+    min-height: 100%;
+    min-width: 100%;
+    background: url(http://i.imgur.com/MpmdC4U.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    }
+#div2 {
+    background-color: #333;
+}
+#login {
+    display:block;
+    background-color:#333;
+    color:#FFFFFF;
+    }
+#divnews{
+    background-color:#333;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+a.bodylink{
+    color:#00FFAE;
+}
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 27px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #FF6239;
+    color:white;
+    text-decoration:none;
+}
+
+a.active {
+    background-color: #B22500;
+    color:white;
+    text-decoration:none;
+}
+a.twitter-share-button{
+    color:#00FFAE;
+}
+#loginwidget{
+    padding: 20px 20px;
+}
+#loginwidget2{
+    padding: 1px 1px;
+}
+#loginwidget3{
+    padding: 1px 1px;
+}
+h1{
+    font-size:48px;
+    color:white;
+    margin: 0 auto;
+}
+h1.storyTitle{
+    font-size:60px;
+    text-align:left;
+}
+h1.author{
+    font-size:32px;
+    text-align:left;
+}
+h4{
+    color:white;
+}
+label{
+    font-weight: normal;
+}
+label.hf{
+    color:white;
+}
+button.btn{
+    background: #b22400;
+    color: #FFFFFF;
+}
+#forget{
+    color: white;
+}
+#NewUsr{
+    display:block;
+    background-color:#333;
+    color:#FFFFFF;
+    margin: 20px 20px;
+    padding: 20px 20px;
+}
+input.form-control{
+    display:inline-block;
+    margin: 0 auto;
+    
+}
+#newForm{
+    background:none;
+}
+#divnews{
+    background:none;
+}
+#flexTime{
+    display:flex;
+}
+#divStories{
+    background:#333;
+    flex: 1;
+}
+#newStory{
+    background:#333;
+    padding-bottom: 50%;
+    flex: 1;
+    
+}

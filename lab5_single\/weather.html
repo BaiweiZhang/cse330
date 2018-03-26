@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>weather </title>
+     <meta charset="UTF-8">
+	 
+    <link rel="stylesheet" type="text/css" href="http://classes.engineering.wustl.edu/cse330/content/weather.css"/>
+    
+    <script type="text/javascript">
+       
+
+        
+        function fetchWeather(){
+			 var but = document.getElementById('but');
+              but.addEventListener("click", fetchWeather, false );
+            var xmlHttp = new XMLHttpRequest();
+            
+            xmlHttp.open("GET", "http://classes.engineering.wustl.edu/cse330/content/weather_json.php", true);
+            
+            
+            xmlHttp.addEventListener("load", function(event){
+                var jsonData = JSON.parse(event.target.responseText);
+				
+				
+           
+             document.getElementsByClassName("weather-loc")[0].innerHTML = "<strong>" + jsonData.location.city +  jsonData.location.state;
+             
+             document.getElementsByClassName("weather-humidity")[0].innerHTML = jsonData.atmosphere.humidity;
+         
+             document.getElementsByClassName("weather-temp")[0].innerHTML = jsonData.current.temp;
+			   
+			   
+          tomrwimg= "http://us.yimg.com/i/us/nws/weather/gr/" + jsonData.tomorrow.code +"ds.png";
+		   document.getElementsByClassName("weather-tomorrow")[0].src= tomrwimg;
+		   
+		   afterimg= "http://us.yimg.com/i/us/nws/weather/gr/" + jsonData.dayafter.code +"ds.png";
+		   document.getElementsByClassName("weather-dayaftertomorrow")[0].src=afterimg;
+		   
+		  
+			//	show_image(("http://us.yimg.com/i/us/nws/weather/gr/" + jsonData.tomorrow.code +"ds.png"), (document.getElementsByClassName("weather-tomorrow")[0]));
+               
+			//	show_image(("http://us.yimg.com/i/us/nws/weather/gr/" + jsonData.dayafter.code +"ds.png"), (document.getElementsByClassName("weather-dayaftertomorrow")[0]));
+				}, false);
+            
+            xmlHttp.send(null);
+         }
+		function show_image(src, place) {
+       var img = document.createElement("img");
+       img.src = src;
+       
+    img.place = place;
+place.src=src;
+
+
+ 
+   }
+ document.addEventListener("DOMContentLoaded",fetchWeather, false );
+
+    </script>
+
+</head>
+
+
+<body>
+
+
+
+<div class="weather" id="weatherWidget">
+	<div class="weather-loc"></div>
+	<div class="weather-humidity"></div>
+	<div class="weather-temp"></div>
+	<img class="weather-tomorrow" />
+	<img class="weather-dayaftertomorrow" />
+</div>
+<button id = "but" type="button">Click Me!</button> 
+</body>
+</html>

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatpromptu! Location-based Chat</title>
+    <!-- External Stylesheets -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css' />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- jQuery & jQueryUI library -->
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+		html,body,div,span,a,li,td,th,h1,h2 {
+			font-family: 'Open Sans', sans-serif;
+			color: #346A4B;
+		}
+		@font-face {
+			font-family: 'Japestyle';
+			src: url(Japestyle.ttf);
+			font-weight: normal;
+			font-style: normal;
+		}
+		body{
+			background-color: #B8EACD;
+		}
+		#loader{
+			text-align:right;
+			padding-right:120px;
+		}
+		#loadMap{
+			display: none;
+			text-align: right;
+		}
+		.sub{
+			text-align: center;
+			padding-right: 150px;
+		}
+		#baby{
+			color:white;
+		}
+		#baby2{
+			color:white;
+		}
+		input{
+			margin:2px;
+		}
+		h1{
+			color:#346A4B;
+			font-family: 'Japestyle';
+		}
+		#welcome{
+			font-size:80px;
+		}
+		h2{
+			color:#346A4B;
+			font-family: 'Japestyle';
+		}
+		p{
+			font-size: 18px;
+		}
+		ul{
+			text-align:left;
+		}
+          #chat{
+			color: white;
+            height:500px;
+			overflow: auto;
+          }
+		  #welcomeDog{
+			text-align:center;
+		  }
+             #newchat{
+            height:500px;
+          }
+           #kickoutWrap{
+            display: none;
+          }
+          #contentWrap{
+            display: none;
+          }
+           #leavenewroom{
+            display: none;
+          }
+           #recoveryWrap{
+            display: none; 
+          }
+           #createroomWrap{
+            display: none;
+          }
+		  #geonear{
+			display: none;
+		  }
+           #newPassWrap{
+            display: none;
+          }
+            #recoveryQWrap{
+            display: none;
+          }
+		  #regWrap{
+			padding-top:25px;
+		  }
+		  #regError{
+			display: none;
+		  }
+          #map{
+            display: none;
+          }
+          #chatWrap{
+                float: left;
+                border: 1px #000 solid;
+				text-align: left;
+				background-color: #7C9D8A;
+				color:white;
+          }
+            #newchatWrap{
+                display: none;
+                float: left;
+                border: 1px #000 solid;
+				text-align: left;
+				background-color: #7C9D8A;
+				color:white;
+          }
+		  #helloWrap{
+			display: none;
+		  }
+		  #userStats{
+			margin: 5px;
+			margin-top: 20px;
+			margin-left: -100px;
+		  }
+          .error {
+            color:red;
+          }
+          
+          .whisper {
+            color:#4D9D6F;
+            font-style: italic;
+          }
+		  #lft{
+			padding: 10px;
+			text-align: left;
+		  }
+		  #mid{
+			padding: 10px;
+			text-align: center;
+			background-color: #B8EACD;
+		  }
+		  #rgt{
+			padding: 10px;
+			padding-top:30px;
+			text-align: left;
+		  }
+		  #rgt1{
+			display: none;
+		  }
+			
+		  p {
+			padding: 5px;
+		  }
+		  .btn-primary{
+			background-color:#346A4B;
+			border: none;
+			transition-duration: 0.4s;
+		  }
+		  .btn-primary:hover{
+			background-color:#405147;
+		  }
+		  .btn-primary:active{
+			background-color:#405147;
+		  }
+			.fileUpload {
+			  position: relative;
+			  overflow: hidden;
+			  margin: 10px;
+		  }
+		  .fileUpload input.upload {
+			  position: absolute;
+			  top: 0;
+			  right: 0;
+			  margin: 0;
+			  padding: 0;
+			  font-size: 20px;
+			  cursor: pointer;
+			  opacity: 0;
+			  filter:alpha(opacity=0);
+		  }
+		  /*.container-fluid{
+			overflow: hidden; 
+		  }
+		  .row [class*="col-"]{
+				margin-bottom: -99999px;
+				padding-bottom: 99999px;
+			}
+		  .row {
+			overflow: hidden; 
+		  }*/
+		  .lefty{
+			margin-left:80px;
+		  }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+			<div class="col-lg-4" id="lft">
+      
+				<div id = "regWrap" class="lefty">
+					<h1>Register Here!</h1>
+					<p style="color:#346A4B;"> Enter user details to register. </p> 
+					<p id = "regError"> </p>
+					<form id = "regUsername">
+					<ul style="list-style-type:none">
+						<li><h2>Username:</h2>
+						<input  size = "35" id = "reguserName"/></li>
+						<li><h2>Password:</h2>
+						<input  type="password" size = "35" id = "regpassword"/></li>
+						<li><h2>Security Question:</h2>
+						<input  size = "35" id = "regq"/></li>
+						<li><h2>Answer:</h2>
+						<input  size = "35" id = "regans"/></li>
+					</ul>
+						<input class="btn btn-primary" type = "submit" value="Submit" style="text-align:right;"/>
+					</form>
+				</div>
+			
+				<div id = "helloWrap" class="lefty">
+					<h1>Hello, your username is</h1>
+					<p class="h2font" id = "currentusername"></p>
+					<h1>Current room:</h1>
+					<p class="h2font" id = "currentroomname"></p>
+				</div>
+					 
+				<div id = "createroomWrap" class="lefty">
+					<h2>Create a new room or join an existing room?</h2>
+					<ul style="list-style-type:none">
+					<li><input id = "newroomname"/>
+					<button class="btn btn-primary" id="newroombut"> Create room </button><br></li>
+					<li><input id = "joinroomname"/>
+					<button class="btn btn-primary" id="joinroombut"> Join room </button></li>
+					<li>create a secrete room or join a secrete room? </li>
+					
+					<li><input id = "newsroomname"/>
+					<input id = "newsroomnamepassword"/>
+					<button class="btn btn-primary" id="newsroombut"> Create secrete room </button><br></li>
+					<li><input id = "joinsroomname"/>
+					<input id = "joinsroomnamepassword"/>
+					<button class="btn btn-primary" id="joinsroombut"> Join secrete room </button></li>
+					<li id="roomerror"></li>
+					</ul>
+				</div>
+  
+				<div id= "kickoutWrap" class="lefty">
+					<p> Dear owner of this chatroom: type the username that you want to ban from this room </p>
+					<input id = "kickusername"/>
+					<button class="btn btn-primary" id = "kickoutbutton">Ban this user from this chatroom </button>
+				</div>
+			</div>
+             
+			<div class="col-lg-4" id="mid">
+				<h1 id="welcome">Welcome to Chatpromptu!</h1>
+				<div id="welcomeDog">
+					<blockquote class="imgur-embed-pub" lang="en" data-id="VbCCLVF"><a href="//imgur.com/VbCCLVF">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+					<!--<img src="http://imgur.com/VbCCLVF" alt="dog" />-->
+				</div>
+				<div id="contentWrap">
+					<div id="chatWrap"> 
+						<div id = "chat"></div>
+						<form id = "send-message">
+							<input style="color:#346A4B;" size = "35" id ="message"/>
+							<input class="btn btn-primary" type = "submit" value="Submit"/>
+						</form>
+					</div>
+					<div id="userStats">
+						<h2>List of users:</h2>
+						<div id="users"></div>
+						<h2>List of rooms:</h2>
+						<div id = "rooms"></div>
+						<h2>List of nearby users:</h2>
+						<div id="nearusers"></div>
+					</div>
+				</div>
+				<!--<div id="newchatWrap">
+				<div id = "newchat"></div>
+				</div>-->
+				<button class="btn btn-primary" id = "leavenewroom">Leave room</button>
+			</div>
+			
+			<div class="col-lg-4" id="rgt">
+				<div id = "usernameWrap" class="lefty">
+					<p id = "usernameError"> </p>
+					<h1>Log In:</h1>
+					<p style="color:#346A4B;">Welcome back! How have ya been?</p>
+					<form id = "setUsername">
+						<ul style="list-style-type:none">
+							<li>
+								<h2>Username:</h2>
+								<input  size = "35" id = "username"/>
+							</li>
+							<li>
+								<h2>Password:</h2>
+								<input  size = "35" id = "password"/>
+							</li>
+						</ul>
+						<div class="sub">
+							<input type = "submit" class="btn btn-primary" value="Submit" style="text-align:right;"/>
+						</div>
+					</form>
+					<div class="sub">
+						<button class="btn btn-primary" onclick= "recover();" style="margin-top:3px;text-align:center;">Recover Password</button>
+					</div>
+				</div>
+				
+				<div id = "recoveryWrap" class="lefty">
+					<p>Enter your username to recover your password.</p>
+					<p id = "recoverError"> </p>
+					<form id = "recoverForm">
+						<input  size = "35" id = "recUsername"/>
+						<input type = "submit" class="btn btn-primary" value="Submit" style="text-align:right;"/>
+					</form>
+				</div>
+           
+				<div id = "recoveryQWrap" class="lefty">
+					<p>Your security question:</p>
+					<p id = "recoverQ1"> </p>
+					<form id = "recoverAnswerForm">
+						<p>Retype your security question and then type your answer.</p>
+						<input  size = "35" id = "recQ1"/>
+						<input  size = "35" id = "q1Ans"/>
+						<input type = "submit" class="btn btn-primary" value="Submit" style="text-align:right;"/>
+					</form>
+				</div>
+
+				<div id = "newPassWrap" class="lefty">
+					<p>Please type your username and then a new password</p>
+					<form id = "newPassForm">
+						<input  size = "35" id = "newUser"/>
+						<input  size = "35" id = "newPass"/>
+						<input type = "submit" class="btn btn-primary" value="Submit" style="text-align:right;"/>
+					</form>
+				</div>
+				
+				<div id="map" style="width:500px;height:380px;"></div>
+				<div id="loader">
+					<button class="btn btn-primary btn-sm" id = "loadMap" value="Load" onclick = "initMap();">Load</button>
+				</div>
+				<div id="rgt1" style="text-align:center;">
+					<label style="color:#346A4B;">Save an Image to the Server</label>
+					<div class="fileUpload btn btn-primary">
+						<span style="color:white;">Choose an image:</span>
+						<input type = "file" id = "uploadfile" class="upload"/>
+					</div>
+					<br>
+					<input class="btn btn-primary" type = "submit" value="Upload"/>
+				</div>
+				<br>
+				<div id = "geonear"  style="text-align:center;">
+					<button class="btn btn-primary" id = "getGeoUsers">Show users near you</button>
+				</div>
+			</div>
+        </div>
+    </div>
+
+	<script>
+		
+	</script>
+
+    <script>
+        // Note: This example requires that you consent to location sharing when
+        // prompted by your browser. If you see the error "The Geolocation service
+        // failed.", it means you probably did not give permission for the browser to
+        // locate you.
+        function initMap() {
+			var map = new google.maps.Map(document.getElementById('map'), {
+				center: {lat: 38.648026, lng: -90.306901}, //Brookings Quadrangle at WashU
+				zoom: 15
+            });
+            var infoWindow = new google.maps.InfoWindow({map: map});
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                    };
+                    //console.log(pos);
+                    //console.log(pos.lat);
+                    // var loadMap = $('#loadMap');
+                    //                      loadMap.onclick=function(){
+                    //                        console.log("the position latitude is "+pos.lat);
+                    io.connect().emit('geo coordinates', {lat:pos.lat, lng: pos.lng});   
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent('Location found.');
+                    map.setCenter(pos);
+				}, function() {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+        }
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+            'Error: The Geolocation service failed.' :
+            'Error: Your browser doesn\'t support geolocation.');
+        }	
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBak83hB5TflPATWwz9JG4yIHX2whXp9xk&callback=initMap">
+    </script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script>
+        function recover(){
+            $('#recoveryWrap').show();    
+        }
+        jQuery (function($){
+            var socket = io.connect();
+			var rooms =  $ ('#rooms');
+            var usernameForm = $ ('#setUsername');
+            var messageForm = $('#send-message');
+            var messageBox = $('#message');
+            //var userBox = $('#username');
+            var users  = $ ('#users');
+            var chat = $ ('#chat');
+            var usernameError = $ ('#usernameError');
+            var username = $('#username');
+            var pwd = $('#password');
+                       
+            // console.log("hello hello"  +pos.lat);
+                       
+            //reg vars
+            var regform = $('#regUsername');
+            var regpwd = $('#regpassword');
+            var regnick = $('#reguserName');
+            var regError =  $('#regError');
+            var regq =  $('#regq');
+            var regans =  $('#regans');
+                        
+            //pwd recovery vars
+            var recoverError = $('#recoverError');
+            var recoverForm = $('#recoverForm');
+            var recUsername = $('#recUsername');
+            var recoverQ1 = $('#recoverQ1');
+            var recoverAnswerForm = $('#recoverAnswerForm');
+            var q1Ans = $('#q1Ans');
+            var recQ1 = $('#recQ1');
+            //after recovery set new pwd vars
+            var newUser = $('#newUser');
+            var newPassForm = $('#newPassForm');
+            var newPass = $('#newPass');
+            //
+            var newroombut = $('#newroombut');
+            var joinroombut = $('#joinroombut');
+            var roomerror = $('#roomerror');
+			
+			//secure room stuff
+
+				
+				
+            //kickout vars
+			var kbutton =$('#kickoutbutton');
+		    var kickusername =$('#kickusername');
+            //map related stuff vars
+            var currentusername = $('#currentusername');
+            var currentroomname = $('#currentroomname');
+			//geonear stuff
+			var getGeoUsers = $('#getGeoUsers');
+			var nearusers = $('#nearusers');
+            //$('#uploadfile').fileupload();
+            newPassForm.submit(function(e){
+                e.preventDefault();
+                socket.emit('resetPassword', {username:newUser.val(), newpass:newPass.val()}, function(data){
+                    if (data){
+                       alert("password reset complete, log in with new password plz ");
+                        $('#newPassWrap').hide(); 
+                        $('#usernameWrap').show();  
+                    }
+					else{alert("pwd reset fail");}
+                }); 
+            });
+            recoverAnswerForm.submit(function(e){
+                e.preventDefault();
+                socket.emit('recoverUserAns', {q1:recQ1.val(), q1Ans:q1Ans.val()}, function (data){
+                    if (data){
+                        $('#recoveryQWrap').hide();
+                        $('#newPassWrap').show();
+                    }
+                    else {
+                        console.log("Cannot recover password because security question and answer are not correct.");   
+                    }  
+                });
+            });
+            recoverForm.submit(function(e){
+                e.preventDefault();
+                socket.emit('recoverUser', recUsername.val(), function (data){
+                    if (data !==null){  
+                        $('#recoveryWrap').hide();
+                        console.log(data);
+                        $('#recoveryQWrap').show();
+                        recoverQ1.html(data);
+                        var Q1stored = data;
+                    }else{
+                        recoverError.html('Your username does not exist in our database, so you cannot recover your password. We are sorry.');
+                    }
+                });
+            });
+            //recover
+            //submitting username and checking if it exsited  
+            usernameForm.submit(function(e){
+                  currentusername.html('');
+                e.preventDefault();
+                socket.emit('login', {username:username.val(), password:pwd.val()}, function(data){
+                    if (data!==false){
+						username.html('');
+						pwd.html('');
+						
+                          currentusername.html(data.username);
+                          currentroomname.html(data.roomname);
+                        $('#usernameWrap').hide();
+                        $('#regWrap').hide();
+						$('#welcome').hide();
+						$('#welcomeDog').hide();
+                        $('#contentWrap').show();
+						$('#loadMap').show();
+						$('#rgt1').show();
+                        $('#map').show();
+                        $('#createroomWrap').show();
+						$('#helloWrap').show();
+						$('#geonear').show();
+						
+                      
+                        
+                    }else {
+                        usernameError.html('That username is already taken or you typed in the wrong password. Please try again.');
+                    }  
+                });
+                username.val('');
+            });   
+            //a form submit to try to register new users to the database
+            regform.submit(function(e){
+                console.log("start reg on client side ");
+                e.preventDefault();
+                socket.emit('register', {username:regnick.val(), password:regpwd.val(), q1: regq.val(), q1ans: regans.val()}, function(data){ 
+                    if (data){
+                        console.log("register complete ! suceessfful");
+                        //$('#usernameWrap').hide();
+                        //$('#regWrap').hide();
+                        //$('#contentWrap').show();
+						regnick.html('');
+						regpwd.html('');
+						regq.html('');
+						regans.html('');
+						
+						alert("register sucess, go back and log in");
+						window.location.reload();
+                    }else {
+						$('#regError').show();
+                        regError.html('something is wrong with registration ');
+                    }    
+                });     
+                regnick.val('');
+            });
+			socket.on('handle near users', function(data){
+				var html = '';
+				nearusers.html(html);
+				for (var i=0; i<data.length; i++){
+					html += data[i].username+ '<br/>';    
+                }
+                nearusers.html(html);   
+			});
+            //a socket on to display all usernames 
+            socket.on('usernames', function(data){
+                var html = '';
+                users.html(html); 
+                for (var i=0; i<data.length; i++){
+                    html += data[i]+ '<br/>';    
+                }
+                users.html(html);   
+            });
+            messageForm.submit (function(e){
+                e.preventDefault();
+                socket.emit('send message',  {roomname: currentroomname.html(), message:messageBox.val()}, function(data){
+                    chat.append('<span class = "error">'+data+'<br></span>');
+                });
+                messageBox.val('');
+				if (chat[0].scrollHeight - chat.scrollTop() == chat.outerHeight()) {
+                    chat.animate({scrollTop: chat[0].scrollHeight});
+                    // We're at the bottom.
+                }
+            });
+            socket.on('load old msgs', function(docs){
+            chat.html('');
+                for (var i= docs.length-1; i>=0 ; i--){
+                    displayMsg(docs[i]);
+                } 
+            });
+            socket.on('updaterooms', function(data){
+                var html = '';
+                rooms.html(html);
+                for (var i=0; i<data.length; i++){
+                    html+= data[i]+ '<br/>';
+                }    
+                rooms.html(html);
+            });
+            socket.on('base64 file', function (data) {
+				processChatMessage(data);
+				//if(data.username===username){
+				//  receivedFileSentByMyself();
+				//}
+			});
+			socket.on('kicked out', function(data){
+				$('#chat').html('');    
+				socket.emit('leave new room',{roomname:currentroomname.html(), username:socket.username}, function (data){
+					currentroomname.html(data);
+				});
+			});
+            socket.on('new message' , function(data){
+                //chat.append ("datamessage is " +'<b>'+ data.msg+'<b>'+','+"data username is "+ data.nick   + "<br/>");     
+                displayMsg(data); 
+            });			
+            function displayMsg(data){
+                chat.append('<span class = "msg" id="baby">'+data.username+ '<b id="baby2">'+ ' said: ' + '</b>'+data.msg+'<br></span>');
+            }
+			kbutton.click(function(){
+				socket.emit('ban user',{baduser: kickusername.val(), currentroom:currentroomname.html()});
+			});
+			getGeoUsers.click(function(){
+				socket.emit('get near users', currentusername.html(), function(data){
+					console.log(data);
+				});
+			});
+						var newsroomname = $('#newsroomname');
+           var newsroomnamepassword = $('#newsroomnamepassword');
+			var newsroombut = $('#newsroombut');
+				
+
+				newsroombut.click(function(){
+					
+						console.log("trying to create new  secure room, and the name is  "+newsroomname.val());
+					$('#chat').html('');
+					users.html('');
+					$('#leavenewroom').show();
+					socket.emit('newsroom', {owner: currentusername.html(), newroomName: newsroomname.val(), newroompass: newsroomnamepassword.val()}, function (data){
+					currentroomname.html(data);
+					newsroomname.html('');
+					newsroomnamepassword.html('');
+					
+					$('#kickoutWrap').show();
+				});
+				});
+				
+				
+				
+			newroombut.click(function (){
+				var newroomName =$ ('#newroomname').val();
+				console.log("trying to create new room, and the name is  "+newroomName);
+				$('#chat').html('');
+				// in a new room I want to take out all of the chat histories and username histories
+				users.html('');
+				$('#leavenewroom').show();
+				socket.emit('newroom', {owner: currentusername.html(), newroomName: newroomName}, function (data){
+					currentroomname.html(data);
+					$('#kickoutWrap').show();
+				});
+			});
+			
+			
+			var joinsroomname =  $('#joinsroomname');
+		var joinsroomnamepassword = $('#joinsroomnamepassword');
+				var joinsroombut = $('#joinsroombut');
+				
+				joinsroombut.click(function(){
+					$ ('#joinroomname').html('');
+				$('#chat').html('');
+					users.html('');
+					$('#leavenewroom').show();
+					socket.emit('joinsroom', {username:  currentusername.html(), roomname: joinsroomname.val(), pass: joinsroomnamepassword.val()}, function(data){
+					if(data !== "error"){
+						currentroomname.html(data);
+					}
+					else {
+						roomerror.html("join room error, you might be trying to join a non exisiting room ");
+					}
+				});
+				});
+				
+			// what to do when user want to join an exisiting room
+			joinroombut.click(function(){
+				var joinroomname = $ ('#joinroomname').val();
+				$ ('#joinroomname').html('');
+				$('#chat').html('');
+				// in a new room I want to take out all of the chat histories and username histories
+				users.html('');
+				$('#leavenewroom').show();
+				socket.emit('joinroom', {username:  currentusername.html(), roomname: joinroomname}, function(data){
+					if(data !== "error"){
+						currentroomname.html(data);
+					}
+					else {
+						roomerror.html("join room error, you might be trying to join a non exisiting room ");
+					}
+				});
+			});
+			// what to do when user want to leave a newly joined room
+			$('#leavenewroom').click(function(){
+				$('#chat').html('');
+				socket.emit('leave new room',{roomname:currentroomname.html(), username:socket.username}, function (data){
+					currentroomname.html(data); 
+				});  
+			});
+            socket.on('whisper', function(data){
+                chat.append('<span class = "whisper"><b>'+data.username + ': </b>' + data.msg + "</span><br/>");   
+            });
+        });
+		function readThenSendFile(data){
+			var reader = new FileReader();
+			reader.onload = function(evt){
+				var msg ={};
+				msg.username =  $('#currentusername').html();
+				msg.file = evt.target.result;
+				msg.fileName = data.name;
+			  io.connect().emit('base64 file', msg);
+			};
+			reader.readAsDataURL(data);
+		}
+        //});
+    </script>
+	<script>
+		$('#uploadfile').bind('change', function(e){
+			var data = e.originalEvent.target.files[0];
+			readThenSendFile(data);      
+		});
+		function processChatMessage(data){
+            var mediaType = "img";
+            if (data.file.substring(0,10)==='data:video')
+                mediaType = "video controls";
+			if (data.file.substring(0,10)==='data:image' || data.file.substring(0,10)==='data:video') {
+                $ ('#chat').append(data.username+" :"+"<a target='_blank' href='" + data.file + "'><"+mediaType+" class='chatbox-image' src='"+data.file+"'></a>");
+            }else{
+                $ ('#chat').append(data.username+" :"+"<a target='_blank' download='" + data.fileName +"' href='"+data.file+"'>"+data.fileName+"</a>");
+            }
+		//   messageToSaveIntoCookie = data.fileName+"(File)";
+		}
+	</script>
+</body>
+</html>

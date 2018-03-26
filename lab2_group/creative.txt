@@ -1,0 +1,26 @@
+name :    Terry Lyu,      AB Brooks
+Student Id:    435091,     441827
+
+
+main page :
+http://ec2-54-191-203-73.us-west-2.compute.amazonaws.com/~thierry1129/main.php
+
+
+For new users(like for graders), you can simply input your desired new username and click : new user join
+if your preferred new username is unfortunately the same as an existing user, the site will show existing username, and then redirect you back to the main page for a new username.
+After you create a new username, the next time you come back to this site, you can log as an exisiting user.
+
+The website is graphically  designed using bootstrap, the login page also shows different welcome languages everytime you view it.
+
+After you log in the website,  you can see three columns, the leftmost is where you upload files to your personal directory,
+in the middle is your personal directory files,
+
+rightmost is the shared files from other users.
+
+
+
+users are also able to share files with all other users, and other users will be able to download shared files.
+
+there is also a tweet button implemented to send quick tweets and tweet about this website after clicking it.
+
+

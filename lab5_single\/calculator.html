@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Page Title</title>
+</head>
+
+<body>
+ <form name="calcInput"  method="GET">
+   A<input id = "A"  name="num1" type="text" />
+  B<input id = "B"  name="num2" type="text" />
+    
+    + <input id = "plus" type="radio" name="radio" value="plus" />
+     - <input id = "minus" type="radio" name="radio" value="minus" />
+   * <input id = "mult" type="radio" name="radio" value="mult" />
+   / <input id = "div" type="radio" name="radio" value="div" />
+ result <textarea id = "result" ></textarea>
+  
+
+<script type="text/javascript">
+var plus = document.getElementById('plus');
+var minus = document.getElementById('minus');
+var mult = document.getElementById('mult');
+var div = document.getElementById('div');
+
+
+plus.addEventListener("click", calc, false );
+minus.addEventListener("click", calc, false );
+mult.addEventListener("click", calc, false );
+div.addEventListener("click", calc, false );
+
+document.getElementById('A').addEventListener("change", calc, false );
+document.getElementById('B').addEventListener("change", calc, false );
+
+
+
+
+function calc(){
+    var A =document.getElementById('A').value;
+var B =document.getElementById('B').value;
+var aVal = parseFloat(A);
+			var bVal = parseFloat(B);
+    var op;
+var result1 ;
+    if( plus.checked){
+        
+         op = "plus";
+       // var op = document.getElementsByName('radio');
+     //  document.write(op);
+    }
+       if( minus.checked){
+         op = "minus";
+         //document.write(op);
+    }
+       // var op = document.getElementsByName('radio');
+    
+       if( mult.checked){
+         op = "mult";
+         //document.write(op);
+    }
+       // var op = document.getElementsByName('radio');
+    
+       if( div.checked){
+         op = "div";
+         //document.write(op);
+    }
+    
+    if (typeof op !== undefined ){
+        
+    
+    if (op== "plus"){
+        result1 = aVal+bVal;
+        result1 = Math.round(result1*100)/100;
+      // document.write(result1); 
+       // var op = document.getElementsByName('radio');
+    }
+        if (op== "minus"){
+       // result1 = A-B;
+         result1 = aVal-bVal;
+        result1 = Math.round(result1*100)/100;
+       // var op = document.getElementsByName('radio');
+    }
+        if (op== "mult"){
+       // result1 = A*B;
+         result1 = aVal*bVal;
+        result1 = Math.round(result1*100)/100;
+       // var op = document.getElementsByName('radio');
+    }
+    if (op== "div"){
+        if(B!=="0"){
+        //result1 = A/B;
+         result1 = aVal/bVal;
+        result1 = Math.round(result1*100)/100;}
+    else result1 = "no division 0";
+        
+       // var op = document.getElementsByName('radio');
+    }
+    
+    document.getElementById('result').innerHTML = result1;
+    
+}
+}
+</script>
+
+</body>
+</html>

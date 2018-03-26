@@ -1,0 +1,21 @@
+creative.txt
+
+Terry Lyu, AB Brooks
+435091, 441827
+
+right click on events share events
+left click change events
+
+drag events change event time
+
+used fullcalendar api
+
+used bootstrap as css
+
+if share to 'guest' all users will see it
+
+enabled monthly, weekly, daily view.
+
+used QTIP so when mouse is stopped near the event it displays the event details,
+
+http://ec2-54-191-203-73.us-west-2.compute.amazonaws.com/~thierry1129/mod7/fullcal.php

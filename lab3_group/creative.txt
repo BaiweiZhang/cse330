@@ -1,0 +1,19 @@
+
+Terry Lyu, AB Brooks
+435091, 441827
+
+
+All of the reqsubmit,required features are working..
+
+
+We also enabled password recovery questions during register, and users can reset thier passwords if correctly answered security questions they set up during registration. 
+
+and we can also search for a news using the search button 
+
+users can unregister, all of their data will be delete from the server
+
+users can also save the news that they are interested in and download it in a text file by clicking on the save button . 
+
+Users can send a prepopulated tweet by clicking the tweet button 
+
+54.191.203.73/~thierry1129/Module3/mainLogin.php
